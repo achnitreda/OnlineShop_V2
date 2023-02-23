@@ -5,7 +5,7 @@
 Online Shopping System is a web application. The purpose of the app is to automate and facilitate the entire shopping process. 
 And it can be used by anyone who wants to create a simple e-commerce website and start his business.
 
-##A dmin User Stories:
+## Admin User Stories:
 
   - As an admin, I want to be able to add, edit, and remove products from the online store.
   - As an admin, I want to be able to set up categories for products and assign them to specific products.
