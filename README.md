@@ -21,4 +21,4 @@ And it can be used by anyone who wants to create a simple e-commerce website and
   - As a client, I want to be able to track the status of my orders and view order history.
 
 ## Technologies used
-  React, TypeScript, Tailwind, Express.js, MongoDB.
+  React, TypeScript, Sass, Express.js, MongoDB.
