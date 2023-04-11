@@ -8,9 +8,9 @@ const categorySchema = new mongoose.Schema({
   icon: {
     type: String,
   },
-  color: {
+  color: { // example we need it in frontend #000000
     type: String,
-  }
+  },
 });
 
 export const Category = mongoose.model("Category", categorySchema);

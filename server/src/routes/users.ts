@@ -12,7 +12,7 @@ function generateToken(payload: any): string {
     throw new Error("The secret key is not defined.");
   }
 
-  return jwt.sign(payload, secret, { expiresIn: "1h" });
+  return jwt.sign(payload, secret, { expiresIn: "1d" });
 }
 
 router.get("/", async (req, res) => {
@@ -38,9 +38,9 @@ router.post("/register", async (req, res) => {
   let user = new User({
     name: req.body.name,
     email: req.body.email,
-    passwordHash: bcrypt.hashSync(req.body.passwordHash, 10),
+    passwordHash: bcrypt.hashSync(req.body.password, 10),
     phone: req.body.phone,
-    isVendor: req.body.isVendor,
+    isAdmin: req.body.isAdmin,
     street: req.body.street,
     apartment: req.body.apartment,
     zip: req.body.zip,
@@ -62,7 +62,7 @@ router.post("/login", async (req, res) => {
 
   if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
     // Generate token
-    const token = generateToken({ userId: user.id, isVendor: user.isVendor });
+    const token = generateToken({ userId: user.id, isAdmin: user.isAdmin });
 
     res.status(200).send({ user: user.email, token: token });
   } else {

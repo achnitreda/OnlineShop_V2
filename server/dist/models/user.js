@@ -22,7 +22,7 @@ const userSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
     },
-    isVendor: {
+    isAdmin: {
         type: Boolean,
         default: false,
     },

@@ -18,7 +18,7 @@ const category_1 = require("../models/category");
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const categories = yield category_1.Category.find();
     if (!categories) {
-        res.status(500).json({ success: false });
+        res.status(500).json({ success: false, message: "No categories found" });
     }
     res.json({ data: categories });
 }));

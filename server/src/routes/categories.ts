@@ -5,7 +5,7 @@ import { Category } from "../models/category";
 router.get("/", async (req, res) => {
   const categories = await Category.find();
   if (!categories) {
-    res.status(500).json({ success: false });
+    res.status(500).json({ success: false, message: "No categories found" });
   }
   res.json({ data: categories });
 });

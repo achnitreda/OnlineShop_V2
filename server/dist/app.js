@@ -12,6 +12,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const cors_1 = __importDefault(require("cors"));
 const jwt_1 = require("./helpers/jwt");
 const errorHandler_1 = require("./helpers/errorHandler");
+const path_1 = __importDefault(require("path"));
 const port = process.env.PORT || 3000;
 const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.dqn8fht.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
 const api = process.env.API_URL;
@@ -21,6 +22,7 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, morgan_1.default)("tiny"));
 app.use((0, jwt_1.authJwt)());
+app.use('/public/uploads', express_1.default.static(path_1.default.join(__dirname, '..', 'public', 'uploads')));
 app.use(errorHandler_1.errorHandler);
 // Routes
 const products_1 = __importDefault(require("./routes/products"));
@@ -44,4 +46,5 @@ mongoose_1.default
 // Server
 app.listen(port, () => {
     console.log(`[Server]: I am running at http://localhost:${port}`);
+    console.log(path_1.default.join(__dirname, '..', 'public', 'uploads'));
 });

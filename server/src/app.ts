@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import {authJwt} from "./helpers/jwt";
 import {errorHandler} from "./helpers/errorHandler";
+import path from "path";
 
 const port: string | number = process.env.PORT || 3000;
 const uri: string = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.dqn8fht.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("tiny"));
 app.use(authJwt());
+app.use('/public/uploads', express.static(path.join(__dirname, '..', 'public', 'uploads')));
 app.use(errorHandler);
 
 // Routes
@@ -44,4 +46,5 @@ mongoose
 // Server
 app.listen(port, () => {
   console.log(`[Server]: I am running at http://localhost:${port}`);
+  console.log(path.join(__dirname, '..', 'public', 'uploads'))
 });

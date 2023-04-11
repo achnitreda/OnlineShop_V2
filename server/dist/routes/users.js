@@ -23,7 +23,7 @@ function generateToken(payload) {
     if (!secret) {
         throw new Error("The secret key is not defined.");
     }
-    return jsonwebtoken_1.default.sign(payload, secret, { expiresIn: "1h" });
+    return jsonwebtoken_1.default.sign(payload, secret, { expiresIn: "1d" });
 }
 router.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield user_1.User.find();
@@ -45,9 +45,9 @@ router.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, functio
     let user = new user_1.User({
         name: req.body.name,
         email: req.body.email,
-        passwordHash: bcryptjs_1.default.hashSync(req.body.passwordHash, 10),
+        passwordHash: bcryptjs_1.default.hashSync(req.body.password, 10),
         phone: req.body.phone,
-        isVendor: req.body.isVendor,
+        isAdmin: req.body.isAdmin,
         street: req.body.street,
         apartment: req.body.apartment,
         zip: req.body.zip,
@@ -66,7 +66,7 @@ router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     if (user && bcryptjs_1.default.compareSync(req.body.password, user.passwordHash)) {
         // Generate token
-        const token = generateToken({ userId: user.id, isVendor: user.isVendor });
+        const token = generateToken({ userId: user.id, isAdmin: user.isAdmin });
         res.status(200).send({ user: user.email, token: token });
     }
     else {
