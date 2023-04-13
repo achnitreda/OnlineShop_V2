@@ -17,6 +17,7 @@ const router = express_1.default.Router();
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../models/user");
+const validator_1 = __importDefault(require("../validator"));
 // generate token
 const secret = process.env.SECRET_KEY;
 function generateToken(payload) {
@@ -41,7 +42,7 @@ router.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
     res.status(200).send(user);
 }));
-router.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post("/register", validator_1.default, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let user = new user_1.User({
         name: req.body.name,
         email: req.body.email,
@@ -67,12 +68,18 @@ router.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* 
     if (user && bcryptjs_1.default.compareSync(req.body.password, user.passwordHash)) {
         // Generate token
         const token = generateToken({ userId: user.id, isAdmin: user.isAdmin });
-        res.status(200).send({ user: user.email, token: token });
+        res.cookie('t', token);
+        const { _id, name, email, isAdmin } = user;
+        res.status(200).send({ user: { email, name, isAdmin }, token: token });
     }
     else {
         res.status(400).send("password is wrong!");
     }
 }));
+router.get("/signout", (req, res) => {
+    res.clearCookie('t');
+    res.json({ message: 'Signout success' });
+});
 router.delete('/:id', (req, res) => {
     user_1.User.findByIdAndRemove(req.params.id).then(user => {
         if (user) {

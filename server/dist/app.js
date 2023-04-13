@@ -13,13 +13,15 @@ const cors_1 = __importDefault(require("cors"));
 const jwt_1 = require("./helpers/jwt");
 const errorHandler_1 = require("./helpers/errorHandler");
 const path_1 = __importDefault(require("path"));
-const port = process.env.PORT || 3000;
+const express_validator_1 = __importDefault(require("express-validator"));
+const port = process.env.PORT || 8000;
 const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0.dqn8fht.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
 const api = process.env.API_URL;
 // middlewares
-app.use((0, cors_1.default)());
+app.use((0, express_validator_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
+app.use((0, cors_1.default)());
 app.use((0, morgan_1.default)("tiny"));
 app.use((0, jwt_1.authJwt)());
 app.use('/public/uploads', express_1.default.static(path_1.default.join(__dirname, '..', 'public', 'uploads')));

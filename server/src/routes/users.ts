@@ -3,6 +3,7 @@ const router = express.Router();
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user";
+import userSignupValidator from "../validator";
 
 // generate token
 const secret = process.env.SECRET_KEY;
@@ -34,7 +35,7 @@ router.get("/:id", async (req, res) => {
   res.status(200).send(user);
 });
 
-router.post("/register", async (req, res) => {
+router.post("/register", userSignupValidator, async (req, res) => {
   let user = new User({
     name: req.body.name,
     email: req.body.email,
@@ -63,12 +64,18 @@ router.post("/login", async (req, res) => {
   if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
     // Generate token
     const token = generateToken({ userId: user.id, isAdmin: user.isAdmin });
-
-    res.status(200).send({ user: user.email, token: token });
+    res.cookie('t', token);
+    const { _id, name, email, isAdmin } = user;
+    res.status(200).send({ user: { email, name, isAdmin }, token: token });
   } else {
     res.status(400).send("password is wrong!");
   }
 }); 
+
+router.get("/signout", (req, res) => {
+  res.clearCookie('t');
+  res.json({ message: 'Signout success' });
+};
 
 router.delete('/:id', (req, res)=>{
   User.findByIdAndRemove(req.params.id).then(user =>{

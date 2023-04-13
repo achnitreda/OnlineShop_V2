@@ -3,14 +3,17 @@ import mongoose from "mongoose";
 const categorySchema = new mongoose.Schema({
   name: {
     type: String,
+    unique: true,
     required: true,
   },
-  icon: {
-    type: String,
-  },
-  color: { // example we need it in frontend #000000
-    type: String,
-  },
+});
+
+categorySchema.virtual("id").get(function () {
+  return this._id.toHexString();
+});
+
+categorySchema.set("toJSON", {
+  virtuals: true,
 });
 
 export const Category = mongoose.model("Category", categorySchema);
